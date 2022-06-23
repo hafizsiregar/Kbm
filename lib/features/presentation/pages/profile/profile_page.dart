@@ -115,6 +115,7 @@ class _ProfilePageState extends State<ProfilePage>
               const SizedBox(height: 40),
               Expanded(
                 child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: [
                     Column(
@@ -150,6 +151,7 @@ class _ProfilePageState extends State<ProfilePage>
       backgroundColor: BaseColor.kWhiteColor,
       body: SafeArea(
         child: ListView(
+          physics: const BouncingScrollPhysics(),
           children: <Widget>[
             const SizedBox(height: 37),
             header(),

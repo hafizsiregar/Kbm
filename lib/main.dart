@@ -8,9 +8,8 @@ import 'package:kbm/features/presentation/providers/faskes_list_notifier.dart';
 import 'package:kbm/features/presentation/providers/main_page_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'features/presentation/providers/faskes_detail_notifier.dart';
 import 'injection_container.dart' as di;
-
+  
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
@@ -46,9 +45,6 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => di.sl<FaskesListNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => di.sl<FaskesDetailNotifier>(),
         ),
       ],
       child: ScreenUtilInit(

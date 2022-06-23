@@ -35,47 +35,8 @@ class FaskesRepositoryImpl implements FaskesRepository {
     if (isConnected) {
       try {
         final response = await faskesRemoteDataSource.getListFaskes();
-        print(response.toString());
+        // print(response.toString());
         return Right(response.map((e) => e.toEntity()).toList());
-      } on DioError catch (error) {
-        if (error.response == null) {
-          return Left(
-            ServerFailure(
-              DataApiFailure(
-                message: error.message,
-              ),
-            ),
-          );
-        }
-        var errorMessage = getErrorMessageFromEndpoint(
-          error.response?.data,
-          error.message,
-          error.response?.statusCode ?? 400,
-        );
-        return Left(
-          ServerFailure(
-            DataApiFailure(
-              message: errorMessage,
-              statusCode: error.response?.statusCode,
-              httpMessage: error.message,
-            ),
-          ),
-        );
-      } on TypeError catch (error) {
-        return Left(ParsingFailure(error.toString()));
-      }
-    } else {
-      return Left(ConnectionFailure('No internet connection'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<Faskes>>> getFaskesDetail(int id) async {
-    final isConnected = await networkInfo.isConnected;
-    if (isConnected) {
-      try {
-        final result = await faskesRemoteDataSource.getFaskesDetail(id);
-        return Right(result.map((e) => e.toEntity()).toList());
       } on DioError catch (error) {
         if (error.response == null) {
           return Left(

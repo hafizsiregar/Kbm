@@ -4,5 +4,4 @@ import 'package:kbm/features/domain/entities/faskes.dart';
 
 abstract class FaskesRepository {
   Future<Either<Failure, List<Faskes>>> getListFaskes();
-  Future<Either<Failure, List<Faskes>>> getFaskesDetail(int id);
 }

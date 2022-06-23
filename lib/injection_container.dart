@@ -5,8 +5,6 @@ import 'package:kbm/core/service/network_info.dart';
 import 'package:kbm/features/data/data_sources/faskes/faskes_remote_data_source.dart';
 import 'package:kbm/features/data/repositories/faskes/faskes_repository_impl.dart';
 import 'package:kbm/features/domain/repositories/faskes/faskes_repository.dart';
-import 'package:kbm/features/domain/use_cases/faskes/get_faskes_detail.dart';
-import 'package:kbm/features/presentation/providers/faskes_detail_notifier.dart';
 import 'package:kbm/features/presentation/providers/faskes_list_notifier.dart';
 import 'features/domain/entities/faskes.dart';
 import 'features/domain/use_cases/faskes/get_list_faskes.dart';
@@ -42,14 +40,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => Connectivity());
 
   //!Providers
-  sl.registerFactory(
-    () => FaskesDetailNotifier(
-      getFaskesDetail: sl()));
   sl.registerLazySingleton(
     () => FaskesListNotifier(getList: sl())
   );
-
-  //! use case
-  sl.registerLazySingleton(
-    () => GetFaskesDetail(repository: sl()));
 }

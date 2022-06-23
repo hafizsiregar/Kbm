@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kbm/core/utils/source/assets.dart';
 import 'package:kbm/core/utils/styles/colors.dart';
 import 'package:kbm/features/domain/entities/faskes.dart';
-import 'package:kbm/features/presentation/pages/chat/chat_page.dart';
 import 'package:kbm/features/presentation/providers/faskes_list_notifier.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/enums/type_load_more.dart';
@@ -33,31 +32,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 2, vsync: this);
     String _selectedValue = 'Filter';
-    // final _listFaskesBloc = sl<FaskesBloc>();
-    // final _listFaskes = <_ItemFaskes>[];
-
-    // var _isShowLoadingCenter = true;
-    // var _isLoading = false;
-    // var _page = 1;
-    // late String _sortBy;
-    // late String _sortType;
-    // String? _keyword;
-
-    // void _doLoadData(bool isShowLoadingCenter) {
-    //   if (_page == 1) {
-    //   _listFaskes.clear();
-    // }
-    // _isShowLoadingCenter = isShowLoadingCenter;
-    // _isLoading = true;
-    // _listFaskesBloc.add(
-    //   LoadFaskesEvent(
-    //     name: _keyword,
-    //     // sortBy: _sortBy,
-    //     page: _page,
-    //   ),
-    // );
-    // }
-
+    
     Widget header() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -71,20 +46,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   fontWeight: FontWeight.bold,
                   color: BaseColor.primaryColor),
             ),
-            SizedBox(
-              child: Row(
-                children: <Widget>[
-                  Image.asset(BaseIcons.notifIcon, width: 25, height: 25),
-                  const SizedBox(width: 15),
-                  InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, ChatPage.routeName);
-                      },
-                      child: Image.asset(BaseIcons.messageIcon,
-                          width: 25, height: 25)),
-                ],
-              ),
-            ),
+            Image.asset(BaseIcons.notifIcon, width: 25, height: 25),
+            // SizedBox(
+            //   child: Row(
+            //     children: <Widget>[
+            //       Image.asset(BaseIcons.notifIcon, width: 25, height: 25),
+            //       const SizedBox(width: 15),
+            //       InkWell(
+            //           onTap: () {
+            //             Navigator.pushNamed(context, ChatPage.routeName);
+            //           },
+            //           child: Image.asset(BaseIcons.messageIcon,
+            //               width: 25, height: 25)),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       );
@@ -331,6 +307,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: <Widget>[
               const SizedBox(height: 25),
@@ -362,7 +339,9 @@ class FaskesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int lengths = 200;
     return ListView.builder(
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(left: 20),
       scrollDirection: Axis.horizontal,
       itemCount: faskes.length,
@@ -375,11 +354,12 @@ class FaskesList extends StatelessWidget {
               padding: const EdgeInsets.only(right: 20),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context, 
-                    FaskesDetailPage.routeName,
-                    arguments: listFaskes.id
-                  );
+                  // Navigator.pushNamed(context, FaskesDetailPage.routeName);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => FaskesDetailPage(
+                      faskes: listFaskes,
+                    ),
+                  ));
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),
@@ -400,7 +380,9 @@ class FaskesList extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              listFaskes.name.substring(0,  17) + '...',
+              listFaskes.name.length < lengths
+              ? listFaskes.name.characters.take(lengths - 185).join() + '...'
+              : listFaskes.name,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.roboto(
                 fontSize: 18,
@@ -438,7 +420,9 @@ class FaskesList extends StatelessWidget {
                     Image.asset(BaseIcons.mapsIcon),
                     const SizedBox(width: 4),
                     Text(
-                      listFaskes.address!.substring(0,  6) + '...',
+                      listFaskes.address!.length < lengths
+                      ? listFaskes.address!.characters.take(lengths - 190).join() + '...'
+                      : listFaskes.address!,
                       style: GoogleFonts.roboto(
                         fontSize: 14,
                         color: BaseColor.primaryColor,

@@ -10,7 +10,6 @@ abstract class FaskesRemoteDataSource {
   ///
   /// Throws [DioError] untuk semua kode error
   Future<List<FaskesModel>> getListFaskes();
-  Future<List<FaskesModel>> getFaskesDetail(int id);
 }
 
 class FaskesRemoteDataSourceImpl implements FaskesRemoteDataSource {
@@ -29,23 +28,6 @@ class FaskesRemoteDataSourceImpl implements FaskesRemoteDataSource {
   @override
   Future<List<FaskesModel>> getListFaskes() async {
     final path = '$baseUrl/locations';
-    final response = await dio.get(
-      path,
-      options: Options(
-        headers: headers
-      )
-    );
-    // print(response.data);
-    if (response.statusCode == 200) {
-      return FaskesResponse.fromJson((response.data)).faskesList;
-    } else {
-      throw DioError(requestOptions: RequestOptions(path: path));
-    }
-  }
-
-  @override
-  Future<List<FaskesModel>> getFaskesDetail(int id) async {
-    final path = '$baseUrl/locations/$id';
     final response = await dio.get(
       path,
       options: Options(

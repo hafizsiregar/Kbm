@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kbm/features/presentation/pages/chat/chat_detail_page.dart';
 import 'package:kbm/features/presentation/pages/chat/chat_page.dart';
-import 'package:kbm/features/presentation/pages/detail/faskes_detail_page.dart';
-import 'package:kbm/features/presentation/pages/home/home_page.dart';
 import 'package:kbm/features/presentation/pages/login/login_page.dart';
 import 'package:kbm/features/presentation/pages/main/main_page.dart';
 import 'package:kbm/features/presentation/pages/register/register_page.dart';
@@ -42,12 +40,11 @@ class AppRoute {
           builder: (context) => const DetailChat(
         )
       );
-      case FaskesDetailPage.routeName:
-      final id = settings.arguments as int;
-        return MaterialPageRoute(
-          builder: (_) => FaskesDetailPage(id: id),
-          settings: settings
-      );
+      // case FaskesDetailPage.routeName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => FaskesDetailPage(),
+      //     settings: settings
+      // );
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
