@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kbm/core/utils/source/assets.dart';
 import 'package:kbm/core/utils/styles/colors.dart';
 import 'package:kbm/features/domain/entities/faskes.dart';
+import 'package:kbm/features/presentation/pages/scan/scan_page.dart';
 import 'package:kbm/features/presentation/providers/faskes_list_notifier.dart';
+import 'package:kbm/features/presentation/widgets/custom_shimmer.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/enums/type_load_more.dart';
 import '../detail/faskes_detail_page.dart';
@@ -19,7 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-
   @override
     void initState() {
       super.initState();
@@ -88,29 +89,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 style: GoogleFonts.roboto(fontSize: 16, color: Colors.white),
               ),
               const SizedBox(height: 14),
-              Container(
-                height: 43,
-                width: 171,
-                decoration: BoxDecoration(
-                    color: BaseColor.kWhiteColor,
-                    borderRadius: BorderRadius.circular(26)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      BaseIcons.scanIcon,
-                      width: 31,
-                      height: 31,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'SCAN QR CODE',
-                      style: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: BaseColor.primaryColor),
-                    )
-                  ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, ScanPage.routeName);
+                },
+                child: Container(
+                  height: 43,
+                  width: 171,
+                  decoration: BoxDecoration(
+                      color: BaseColor.kWhiteColor,
+                      borderRadius: BorderRadius.circular(26)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        BaseIcons.scanIcon,
+                        width: 31,
+                        height: 31,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'SCAN QR CODE',
+                        style: GoogleFonts.roboto(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: BaseColor.primaryColor),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -226,9 +232,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               builder: (context, data, child) {
                 final state = data.listFaskesState;
                 if (state == TypeLoadMore.LOADING) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: faskesWithShimmer());
                 } else if (state == TypeLoadMore.FAILURE) {
                   return Center(
                     child: Text(data.message),
@@ -264,8 +270,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ],
         ),
-        // );
-        // },
       );
     }
 
@@ -330,12 +334,73 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 }
 
-class FaskesList extends StatelessWidget {
+Widget faskesWithShimmer() => ListView.builder(
+  shrinkWrap: true,
+  physics: const BouncingScrollPhysics(),
+  scrollDirection: Axis.horizontal,
+  itemCount: 3,
+  itemBuilder: (context, index) {
+    return Column(
+      children: <Widget>[
+        CustomShimmer.first(
+          padding: const EdgeInsets.only(right: 20),
+          width: 170, 
+          height: 170, 
+          borderRadius: BorderRadius.circular(10)
+        ),
+        const SizedBox(height: 10),
+        CustomShimmer.second(
+          padding: const EdgeInsets.only(right: 20),
+          width: 170, 
+          height: 16, 
+          borderRadius: BorderRadius.circular(0)
+        ),
+        const SizedBox(height: 5),
+        CustomShimmer.third(
+          padding: const EdgeInsets.only(right: 20),
+          width: 170, 
+          height: 13, 
+          borderRadius: BorderRadius.circular(0)
+        ),
+      ],
+    );
+  }
+);
+
+class FaskesList extends StatefulWidget {
   final List<Faskes> faskes;
   const FaskesList({
     Key? key,
     required this.faskes,
   }) : super(key: key);
+
+  @override
+  State<FaskesList> createState() => _FaskesListState();
+}
+
+class _FaskesListState extends State<FaskesList> {
+
+  late bool _isLoading;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = true;
+    Future.delayed(const Duration(seconds: 3), () {
+      if(!mounted) {
+        return;
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _isLoading;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -344,9 +409,12 @@ class FaskesList extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(left: 20),
       scrollDirection: Axis.horizontal,
-      itemCount: faskes.length,
+      itemCount: widget.faskes.length,
       itemBuilder: (context, index) {
-        final listFaskes = faskes[index];
+        if(_isLoading) {
+          return faskesWithShimmer();
+        } else {
+        final listFaskes = widget.faskes[index];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -434,6 +502,7 @@ class FaskesList extends StatelessWidget {
             ),
           ],
         );
+        }
       },
     );
   }

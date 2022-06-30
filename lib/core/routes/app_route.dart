@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kbm/features/presentation/pages/booking/booking_page.dart';
 import 'package:kbm/features/presentation/pages/chat/chat_detail_page.dart';
 import 'package:kbm/features/presentation/pages/chat/chat_page.dart';
 import 'package:kbm/features/presentation/pages/login/login_page.dart';
 import 'package:kbm/features/presentation/pages/main/main_page.dart';
 import 'package:kbm/features/presentation/pages/register/register_page.dart';
 import 'package:kbm/features/presentation/pages/splash/splash_page.dart';
+
+import '../../features/presentation/pages/scan/scan_page.dart';
 
 class AppRoute {
 
@@ -38,6 +41,16 @@ class AppRoute {
       case DetailChat.routeName:
         return MaterialPageRoute(
           builder: (context) => const DetailChat(
+        )
+      );
+      case ScanPage.routeName:
+        return MaterialPageRoute(
+          builder: (context) => const ScanPage(
+        )
+      );
+      case BookingPage.routeName:
+        return MaterialPageRoute(
+          builder: (context) => const BookingPage(
         )
       );
       // case FaskesDetailPage.routeName:

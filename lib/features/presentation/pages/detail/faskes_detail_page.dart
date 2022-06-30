@@ -4,6 +4,8 @@ import 'package:kbm/features/presentation/widgets/button_auth.dart';
 import '../../../../core/utils/source/assets.dart';
 import '../../../../core/utils/styles/colors.dart';
 import '../../../domain/entities/faskes.dart';
+import '../../widgets/custom_shimmer.dart';
+import '../booking/booking_page.dart';
 
 class FaskesDetailPage extends StatefulWidget {
   static const routeName = '/faskes-detail';
@@ -19,6 +21,20 @@ class FaskesDetailPage extends StatefulWidget {
 }
 
 class _FaskesDetailPageState extends State<FaskesDetailPage> {
+
+  late bool _isLoading;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = true;
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -26,7 +42,7 @@ class _FaskesDetailPageState extends State<FaskesDetailPage> {
 
     Widget header() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -69,7 +85,10 @@ class _FaskesDetailPageState extends State<FaskesDetailPage> {
     }
 
     Widget imgFaskes() {
-      return Container(
+      return _isLoading
+      ? imgFaskesWithShimmer()
+      :
+      Container(
         height: 220,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -146,7 +165,10 @@ class _FaskesDetailPageState extends State<FaskesDetailPage> {
     }
 
     Widget contentFaskes() {
-      return Padding(
+      return _isLoading
+      ? contentFaskesWithShimmer()
+      :
+      Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: <Widget>[
@@ -286,7 +308,9 @@ class _FaskesDetailPageState extends State<FaskesDetailPage> {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 30),
         child: ButtonAuth(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, BookingPage.routeName);
+          },
           text: 'Pemesanan',
           background: BaseColor.primaryColor,
           textColor: BaseColor.kWhiteColor,
@@ -307,7 +331,7 @@ class _FaskesDetailPageState extends State<FaskesDetailPage> {
               imgFaskes(),
               const SizedBox(height: 25),
               contentFaskes(),
-              const SizedBox(height: 40),
+              const Spacer(),
               btnPesan(),
             ],
           ),
@@ -315,4 +339,61 @@ class _FaskesDetailPageState extends State<FaskesDetailPage> {
       ),
     );
   }
+}
+
+Widget imgFaskesWithShimmer() {
+  return CustomShimmer.first(
+    padding: const EdgeInsets.all(0),
+    width: double.infinity,
+    height: 220,
+    borderRadius: BorderRadius.circular(0),
+  );
+}
+
+Widget contentFaskesWithShimmer() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 30),
+    child: Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            CustomShimmer.first(
+              padding: const EdgeInsets.all(0),
+              width: 180,
+              height: 35,
+              borderRadius: BorderRadius.circular(0),
+            ),
+            CustomShimmer.second(
+              padding: const EdgeInsets.all(0),
+              width: 148,
+              height: 35,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ],
+        ),
+        const SizedBox(height: 25),
+        CustomShimmer.first(
+          width: double.infinity, 
+          height: 70, 
+          borderRadius: BorderRadius.circular(0),
+          padding: const EdgeInsets.all(0),
+        ),
+        const SizedBox(height: 22),
+        CustomShimmer.second(
+          width: double.infinity, 
+          height: 25, 
+          borderRadius: BorderRadius.circular(0),
+          padding: const EdgeInsets.all(0),
+        ),
+        const SizedBox(height: 22),
+        CustomShimmer.second(
+          width: double.infinity, 
+          height: 25, 
+          borderRadius: BorderRadius.circular(0),
+          padding: const EdgeInsets.all(0),
+        ),
+      ],
+    ),
+  );
 }

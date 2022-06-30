@@ -27,4 +27,5 @@ class BaseImages {
   static const circleKlinik1 = '$imagePath/img_circle_klinik1.png';
   static const rumahSakit1 = '$imagePath/img_rumah_sakit_nusa_indah.png';
   static const rumahSakit2 = '$imagePath/img_rumah_sakit_naura.png';
+  static const imgFlash = '$imagePath/img_flash.png';
 }
