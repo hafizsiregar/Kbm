@@ -5,7 +5,8 @@ import 'package:kbm/core/utils/source/assets.dart';
 import 'package:kbm/core/utils/styles/colors.dart';
 import 'package:kbm/features/domain/entities/faskes.dart';
 import 'package:kbm/features/presentation/pages/scan/scan_page.dart';
-import 'package:kbm/features/presentation/providers/faskes_list_notifier.dart';
+import 'package:kbm/features/presentation/providers/clinic_list_notifier.dart';
+import 'package:kbm/features/presentation/providers/hospitals_list_notifier.dart';
 import 'package:kbm/features/presentation/widgets/custom_shimmer.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/enums/type_load_more.dart';
@@ -14,7 +15,7 @@ import '../detail/faskes_detail_page.dart';
 class HomePage extends StatefulWidget {
   static const routeName = 'home';
 
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key,}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,9 +25,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
     void initState() {
       super.initState();
-      Future.microtask(() =>
-      Provider.of<FaskesListNotifier>(context, listen: false)
-      ..fetchListFaskes());
+      Future.microtask(() {
+      Provider.of<HospitalsListNotifier>(context, listen: false)
+      .fetchListHospitals();
+      Provider.of<ClinicListNotifier>(context, listen: false)
+      .fetchListClinic();
+    });
   }
 
   @override
@@ -228,13 +232,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           physics: const NeverScrollableScrollPhysics(), 
           controller: _tabController,
           children: [
-            Consumer<FaskesListNotifier>(
+            Consumer<ClinicListNotifier>(
               builder: (context, data, child) {
                 final state = data.listFaskesState;
                 if (state == TypeLoadMore.LOADING) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 20),
-                    child: faskesWithShimmer());
+                    child: faskesWithShimmer(data.listFaskes));
                 } else if (state == TypeLoadMore.FAILURE) {
                   return Center(
                     child: Text(data.message),
@@ -248,13 +252,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 }
               },
             ),
-            Consumer<FaskesListNotifier>(
+            Consumer<HospitalsListNotifier>(
               builder: (context, data, child) {
                 final state = data.listFaskesState;
                 if (state == TypeLoadMore.LOADING) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: faskesWithShimmer(data.listFaskes));
                 } else if (state == TypeLoadMore.FAILURE) {
                   return Center(
                     child: Text(data.message),
@@ -334,11 +338,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 }
 
-Widget faskesWithShimmer() => ListView.builder(
+Widget faskesWithShimmer(List<Faskes> faskes) => ListView.builder(
   shrinkWrap: true,
   physics: const BouncingScrollPhysics(),
   scrollDirection: Axis.horizontal,
-  itemCount: 3,
+  itemCount: faskes.length,
   itemBuilder: (context, index) {
     return Column(
       children: <Widget>[
@@ -412,7 +416,7 @@ class _FaskesListState extends State<FaskesList> {
       itemCount: widget.faskes.length,
       itemBuilder: (context, index) {
         if(_isLoading) {
-          return faskesWithShimmer();
+          return faskesWithShimmer(widget.faskes);
         } else {
         final listFaskes = widget.faskes[index];
         return Column(

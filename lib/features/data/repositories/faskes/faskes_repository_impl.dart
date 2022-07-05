@@ -30,11 +30,91 @@ class FaskesRepositoryImpl implements FaskesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Faskes>>> getListFaskes() async {
+  Future<Either<Failure, List<Faskes>>> getListAllFaskes() async {
     final isConnected = await networkInfo.isConnected;
     if (isConnected) {
       try {
-        final response = await faskesRemoteDataSource.getListFaskes();
+        final response = await faskesRemoteDataSource.getListAllFaskes();
+        // print(response.toString());
+        return Right(response.map((e) => e.toEntity()).toList());
+      } on DioError catch (error) {
+        if (error.response == null) {
+          return Left(
+            ServerFailure(
+              DataApiFailure(
+                message: error.message,
+              ),
+            ),
+          );
+        }
+        var errorMessage = getErrorMessageFromEndpoint(
+          error.response?.data,
+          error.message,
+          error.response?.statusCode ?? 400,
+        );
+        return Left(
+          ServerFailure(
+            DataApiFailure(
+              message: errorMessage,
+              statusCode: error.response?.statusCode,
+              httpMessage: error.message,
+            ),
+          ),
+        );
+      } on TypeError catch (error) {
+        return Left(ParsingFailure(error.toString()));
+      }
+    } else {
+      return Left(ConnectionFailure('No internet connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Faskes>>> getListHospitals() async {
+    final isConnected = await networkInfo.isConnected;
+    if(isConnected) {
+      try {
+        final response = await faskesRemoteDataSource.getListHospitals();
+        // print(response.toString());
+        return Right(response.map((e) => e.toEntity()).toList());
+      } on DioError catch (error) {
+        if (error.response == null) {
+          return Left(
+            ServerFailure(
+              DataApiFailure(
+                message: error.message,
+              ),
+            ),
+          );
+        }
+        var errorMessage = getErrorMessageFromEndpoint(
+          error.response?.data,
+          error.message,
+          error.response?.statusCode ?? 400,
+        );
+        return Left(
+          ServerFailure(
+            DataApiFailure(
+              message: errorMessage,
+              statusCode: error.response?.statusCode,
+              httpMessage: error.message,
+            ),
+          ),
+        );
+      } on TypeError catch (error) {
+        return Left(ParsingFailure(error.toString()));
+      }
+    } else {
+      return Left(ConnectionFailure('No internet connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Faskes>>> getListClinic() async {
+    final isConnected = await networkInfo.isConnected;
+    if(isConnected) {
+      try {
+        final response = await faskesRemoteDataSource.getListClinic();
         // print(response.toString());
         return Right(response.map((e) => e.toEntity()).toList());
       } on DioError catch (error) {

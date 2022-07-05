@@ -4,6 +4,6 @@ class BaseUrlConfig {
   final requiredToken = 'requiredtoken';
 
   // Production
-  static const baseUrlProductionPanelEndPoint = 'http://klinikberhentimerokok.com/api';
+  static const baseUrlProductionPanelEndPoint = 'https://klinikberhentimerokok.com/api';
 
 }

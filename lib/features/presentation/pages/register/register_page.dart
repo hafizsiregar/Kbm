@@ -18,10 +18,19 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
+  TextEditingController nameController = 
+    TextEditingController(text: '');
+
+  TextEditingController emailController = 
+    TextEditingController(text: '');  
+
+  TextEditingController passwordController = 
+    TextEditingController(text: '');  
+
   @override
   Widget build(BuildContext context) {
     bool agree = false;
-
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -71,6 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 9),
                 CustomTxtFormField(
+                  controller: nameController,
                   hintText: 'Masukkan nama kamu',
                   obscureText: false,
                 ),
@@ -87,6 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 9),
                 CustomTxtFormField(
+                  controller: emailController,
                   hintText: 'Masukkan email kamu',
                   obscureText: false,
                 ),
@@ -103,6 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 9),
                 CustomTxtFormField(
+                  controller: passwordController,
                   hintText: 'Masukkan password kamu',
                   obscureText: true,
                 ),

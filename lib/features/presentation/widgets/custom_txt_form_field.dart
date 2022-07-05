@@ -4,10 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomTxtFormField extends StatelessWidget {
   String hintText;
   bool obscureText;
+  TextEditingController controller;
   CustomTxtFormField({
     Key? key, 
     required this.hintText,
-    required this.obscureText
+    required this.obscureText,
+    required this.controller
   }) : super(key: key);
 
   @override
@@ -15,7 +17,7 @@ class CustomTxtFormField extends StatelessWidget {
     return SizedBox(
       height: 42,
       child: TextFormField(
-        // controller: _usernameController,
+        controller: controller,
         autocorrect: true,
         cursorColor: Colors.black,
         keyboardType: TextInputType.emailAddress,

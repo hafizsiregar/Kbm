@@ -6,8 +6,8 @@ import 'package:kbm/features/presentation/pages/login/login_page.dart';
 import 'package:kbm/features/presentation/pages/main/main_page.dart';
 import 'package:kbm/features/presentation/pages/register/register_page.dart';
 import 'package:kbm/features/presentation/pages/splash/splash_page.dart';
-
 import '../../features/presentation/pages/scan/scan_page.dart';
+import 'package:kbm/injection_container.dart';
 
 class AppRoute {
 
@@ -20,7 +20,7 @@ class AppRoute {
       );
       case LoginPage.routeName:
         return MaterialPageRoute(
-          builder: (context) => const LoginPage(
+          builder: (context) =>  const LoginPage(
         )
       );
       case RegisterPage.routeName:

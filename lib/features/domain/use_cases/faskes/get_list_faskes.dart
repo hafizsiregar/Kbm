@@ -4,12 +4,12 @@ import 'package:kbm/features/domain/entities/faskes.dart';
 import '../../../../core/error/failure.dart';
 import '../../repositories/faskes/faskes_repository.dart';
 
-class GetListFaskes {
+class GetListAllFaskes {
   
   final FaskesRepository repository;
-  GetListFaskes({required this.repository});
+  GetListAllFaskes({required this.repository});
 
   Future<Either<Failure, List<Faskes>>> call() {
-    return repository.getListFaskes();
+    return repository.getListAllFaskes();
   }
 }

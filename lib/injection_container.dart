@@ -5,7 +5,13 @@ import 'package:kbm/core/service/network_info.dart';
 import 'package:kbm/features/data/data_sources/faskes/faskes_remote_data_source.dart';
 import 'package:kbm/features/data/repositories/faskes/faskes_repository_impl.dart';
 import 'package:kbm/features/domain/repositories/faskes/faskes_repository.dart';
+import 'package:kbm/features/domain/use_cases/faskes/get_list_cilinic.dart';
+import 'package:kbm/features/domain/use_cases/faskes/get_list_hospitals.dart';
+import 'package:kbm/features/presentation/pages/login/login_page.dart';
+import 'package:kbm/features/presentation/providers/clinic_list_notifier.dart';
+import 'package:kbm/features/presentation/providers/hospitals_list_notifier.dart';
 import 'package:kbm/features/presentation/providers/faskes_list_notifier.dart';
+import 'package:kbm/features/presentation/providers/login_notifier.dart';
 import 'features/domain/entities/faskes.dart';
 import 'features/domain/use_cases/faskes/get_list_faskes.dart';
 
@@ -33,7 +39,15 @@ Future<void> init() async {
   sl.registerLazySingleton<FaskesRemoteDataSource>(() => FaskesRemoteDataSourceImpl(
     dio: Dio()
   ));
-  sl.registerLazySingleton(() => GetListFaskes(repository: sl()));
+  sl.registerLazySingleton(() => GetListAllFaskes(repository: sl()));
+  sl.registerLazySingleton(() => GetListHospitals(repository: sl()));
+  sl.registerLazySingleton(() => GetListClinic(repository: sl()));
+
+  // //! Page
+  // sl.registerLazySingleton(() => LoginPage(
+  //   email: sl(),
+  //   password: sl(),
+  // ));
 
   //! Connectivity
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
@@ -43,4 +57,13 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => FaskesListNotifier(getList: sl())
   );
+  sl.registerLazySingleton(
+    () => HospitalsListNotifier(listHospitals: sl())
+  );
+  sl.registerLazySingleton(
+    () => ClinicListNotifier(listClinic: sl())
+  );
+  // sl.registerLazySingleton(
+  //   () => LoginNotifier(authRepository: sl())
+  // );
 }
